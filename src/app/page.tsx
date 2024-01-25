@@ -9,14 +9,15 @@ export default function HomePage() {
   const { name } = useName();
 
   return (
-    <div className="bg-gradient-to-br from-red-400 via-yel low-400 to-purple-600">
+    <div className="bg-gradient-to-br min-h-screen from-red-400 via-yel low-400 to-purple-600">
       <main className="max-w-6xl mx-auto h-full w-full">
         <Navbar></Navbar>
-        <div className="flex min-h-screen flex-col items-center justify-center ">
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <div className="flex  flex-col items-center justify-center ">
+          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-10 ">
             <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
               Hello <span className="text-[hsl(280,100%,70%)]">{name}</span>!
             </h1>
+            <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl"> START </button>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
               <Link
                 className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"

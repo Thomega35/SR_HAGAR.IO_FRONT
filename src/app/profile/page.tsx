@@ -14,19 +14,19 @@ export default function HomePage() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-red-400 via-yel low-400 to-purple-600">
+    <div className="bg-gradient-to-br min-h-screen from-red-400 via-yel low-400 to-purple-600">
       <main className="max-w-6xl mx-auto h-full">
         <Navbar></Navbar>
-        <div className="flex min-h-screen flex-col items-center justify-center ">
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <div className="flex flex-col items-center justify-center ">
+          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-10 ">
             <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-              In game name : <span className="text-[hsl(280,100%,70%)]">{name}</span>
+              Name : <span className="text-[hsl(280,100%,70%)]">{name}</span>
             </h1>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:gap-8 justify-center">
               <div>
                 <form className="container flex flex-col items-center justify-center gap-12 " onSubmit={onFormSubmit}>
                   <label>
-                    Enter your name:
+                    Enter your InGame name:
                     <input
                       type="text"
                       value={form_name}

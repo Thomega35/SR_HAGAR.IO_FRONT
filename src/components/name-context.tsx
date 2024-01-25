@@ -1,5 +1,5 @@
-"use client";
-import { useState, useContext, createContext } from 'react';
+"use client"; // This is a client component 👈🏽
+import { useState, useContext, useEffect, createContext } from 'react';
 
 const nameContext = createContext<{
     name: string;
@@ -18,8 +18,12 @@ export function NameProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [name, setName] = useState<string>("Thomas_"+makeid(3));
+    const [name, setName] = useState<string>("");
 
+    useEffect(() => {
+        // Generate random name only on the client side
+        setName("Thomas_" + makeid(3));
+    }, []); // Empty dependency array ensures it runs only on mount
 
     return (
         <nameContext.Provider
