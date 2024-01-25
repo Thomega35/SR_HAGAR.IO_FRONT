@@ -1,46 +1,48 @@
 "use client";
-import { useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext, useEffect } from 'react';
 
 const nameContext = createContext<{
-    name: string;
-    setName: (name: string) => void;
-}>({
-    name: "",
-    setName: () => { },
+  name: string;
+  setName: (name: string) => void;
+}>({} as {
+  name: string;
+  setName: (name: string) => void;
 });
 
 export function useName() {
-    return useContext(nameContext);
+  return useContext(nameContext);
 }
 
 export function NameProvider({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const [name, setName] = useState<string>("Thomas_"+makeid(3));
+  const [name, setName] = useState<string>("Thomega");
+  useEffect(() => {
+    setName(`Thomega_${makeid(3)}`);
+  }, []);
 
-
-    return (
-        <nameContext.Provider
-            value={{
-                name,
-                setName,
-            }}
-        >
-            {children}
-        </nameContext.Provider>
-    );
+  return (
+    <nameContext.Provider
+      value={{
+        name,
+        setName,
+      }}
+    >
+      {children}
+    </nameContext.Provider>
+  );
 }
 
 function makeid(length: number) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        counter += 1;
-    }
-    return result;
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }

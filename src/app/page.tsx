@@ -1,9 +1,8 @@
-"use client"; // This is a client component 👈🏽
+"use client";
 
 import Link from "next/link";
-import Navbar from "../components/navbar";
-import { useState } from "react";
 import { useName } from "~/components/name-context";
+import Navbar from "../components/navbar";
 
 export default function HomePage() {
   const { name } = useName();
