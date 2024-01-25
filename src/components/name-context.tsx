@@ -1,5 +1,5 @@
-"use client";
-import { useState, useContext, createContext, useEffect } from 'react';
+"use client"; // This is a client component 👈🏽
+import { useState, useContext, useEffect, createContext } from 'react';
 
 const nameContext = createContext<{
   name: string;
@@ -18,31 +18,33 @@ export function NameProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [name, setName] = useState<string>("Thomega");
-  useEffect(() => {
-    setName(`Thomega_${makeid(3)}`);
-  }, []);
+    const [name, setName] = useState<string>("");
 
-  return (
-    <nameContext.Provider
-      value={{
-        name,
-        setName,
-      }}
-    >
-      {children}
-    </nameContext.Provider>
-  );
+    useEffect(() => {
+        // Generate random name only on the client side
+        setName("Thomas_" + makeid(3));
+    }, []); // Empty dependency array ensures it runs only on mount
+
+    return (
+        <nameContext.Provider
+            value={{
+                name,
+                setName,
+            }}
+        >
+            {children}
+        </nameContext.Provider>
+    );
 }
 
 function makeid(length: number) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
 }
