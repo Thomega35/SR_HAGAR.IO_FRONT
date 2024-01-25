@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function () {
+export default function NavBar() {
     return (
         <nav
             className="rounded-lg shadow bg-[#e0e0e0] max-w-6xl mx-auto p-3 pl-8 pr-8 flex items-center w-full justify-between"       
