@@ -4,7 +4,7 @@ import { useName } from "~/components/name-context";
 import Navbar from "../../components/navbar";
 import { useState } from "react";
 
-export default function HomePage() {
+export default function ProfilePage() {
   const [form_name, setFormName] = useState("");
   const { name, setName } = useName();
 
