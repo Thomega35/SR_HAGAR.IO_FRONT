@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useName } from "~/components/name-context";
 import Navbar from "../components/navbar";
 import { useState } from "react";
-import { Canvas } from "./canva";
+import { Canvas } from "./canvas";
 
 export default function HomePage() {
-  const { name } = useName();
+  const { name, setName } = useName();
   const [game, setGame] = useState(false);
 
   if (!game) {
@@ -54,7 +54,7 @@ export default function HomePage() {
         <main className="max-w-6xl mx-auto h-full w-full">
           <Navbar></Navbar>
           <div className="flex  flex-col items-center justify-center ">
-            <Canvas game={game} setGame={setGame}></Canvas>
+            <Canvas game={game} setGame={setGame} name={name} setName={setName}></Canvas>
           </div>
         </main>
       </div>
