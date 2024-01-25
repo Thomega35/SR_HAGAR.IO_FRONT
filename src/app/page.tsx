@@ -1,4 +1,4 @@
-"use client";
+"use client"; // This is a client component 👈🏽
 
 import Link from "next/link";
 import { useName } from "~/components/name-context";
