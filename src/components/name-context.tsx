@@ -2,21 +2,21 @@
 import { useState, useContext, useEffect, createContext } from 'react';
 
 const nameContext = createContext<{
-    name: string;
-    setName: (name: string) => void;
-}>({
-    name: "",
-    setName: () => { },
+  name: string;
+  setName: (name: string) => void;
+}>({} as {
+  name: string;
+  setName: (name: string) => void;
 });
 
 export function useName() {
-    return useContext(nameContext);
+  return useContext(nameContext);
 }
 
 export function NameProvider({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
     const [name, setName] = useState<string>("");
 
