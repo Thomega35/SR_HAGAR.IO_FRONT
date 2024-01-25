@@ -1,23 +1,22 @@
 "use client";
-
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Params } from '~/lib/useProcess';
+import type { MutableRefObject } from 'react';
+import type { Game, Params } from '~/lib/useProcess';
+import { useEffect, useRef } from 'react';
 import { useMouseOn } from '~/lib/useMouse';
 import { useProcess } from '~/lib/useProcess';
 import { Player } from '~/lib/usePlayer';
 import { Food } from '~/lib/useFood';
-import { number } from 'zod';
 
 export function Canvas(params: Params) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const cursorScreen = useMouseOn(canvasRef)
     const gameProcess = useProcess();
-    const {game, setGame} = params;
-    const {name, setName} = params;
-    const meX : number = Math.floor(Math.random() *1000);
-    const meY : number = Math.floor(Math.random() *500);
-    const meValue : number = 1;
-    const meColor : string = "green";
+    const {setGame} = params;
+    // const {name, setName} = params;
+    // const meX = Math.floor(Math.random() *1000);
+    // const meY = Math.floor(Math.random() *500);
+    // const meValue = 1;
+    // const meColor = "green";
 
 
 
@@ -26,10 +25,10 @@ export function Canvas(params: Params) {
     // const foods = [[10, 100], [400, 400], [200, 200], [300, 300], [100, 100], [100, 400], [400, 100], [800, 400], [800, 100], [700, 200], [800, 300], [600, 400], [900, 100], [900, 350]];
     const foods = [new Food(10, 100), new Food(400, 400), new Food(200, 200), new Food(300, 300), new Food(100, 100), new Food(100, 400), new Food(400, 100), new Food(800, 400), new Food(800, 100), new Food(700, 200), new Food(800, 300), new Food(600, 400), new Food(900, 100), new Food(900, 350)];
 
-    if (game) {
-        update(cursorScreen, gameProcess, players, foods);
-        draw(canvasRef!, players, foods, meX, meY, meValue, meColor);
-    }
+    Draw(canvasRef, players, foods, 500, 250, 10, "green");
+    Update(cursorScreen, gameProcess!, players, foods);
+
+
     return (
         <div className='pt-3'>
             <div className="pb-3">
@@ -41,11 +40,13 @@ export function Canvas(params: Params) {
     
 }
 
-function update(cursorScreen : {x: number, y: number}, gameProcess : any, players : any, foods : any) {
+export function Update(cursorScreen : {x: number, y: number}, gameProcess : Game, players : Player[], foods : Food[]) {
     console.log(cursorScreen);
+    console.log(gameProcess);
+    console.log(players);
+    console.log(foods);
 }
-
-function draw(canvasRef : MutableRefObject<HTMLCanvasElement | null>, players : Player[], foods : Food[], meX : number, meY : number, meValue : number, meColor : string) {
+export function Draw(canvasRef : MutableRefObject<HTMLCanvasElement | null>, players : Player[], foods : Food[], meX : number, meY : number, meValue : number, meColor : string) {
     // Draw the players
     useEffect(() => {
         if (canvasRef.current) {
@@ -63,7 +64,7 @@ function draw(canvasRef : MutableRefObject<HTMLCanvasElement | null>, players : 
                 });
             }
         }
-    }, []);
+    });
 
     // Draw the food
     useEffect(() => {
@@ -82,7 +83,7 @@ function draw(canvasRef : MutableRefObject<HTMLCanvasElement | null>, players : 
                 });
             }
         }
-    }, []);
+    });
 
     // Draw me
     useEffect(() => {
@@ -99,6 +100,6 @@ function draw(canvasRef : MutableRefObject<HTMLCanvasElement | null>, players : 
                 ctx.stroke();
             }
         }
-    }, []);
+    });
 
 }

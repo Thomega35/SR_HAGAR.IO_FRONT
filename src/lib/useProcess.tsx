@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Food } from "./useFood";
-import { Player } from "./usePlayer";
+import type { Food } from "./useFood";
+import type { Player } from "./usePlayer";
 
 
 export function useProcess() {
@@ -18,15 +18,9 @@ export function useProcess() {
 }
 
 export type Params = {
-    game: boolean;
     name: string;
     setGame: (game: boolean) => void;
     setName: (name: string) => void;
-};
-
-type Position = {
-    x: number;
-    y: number;
 };
 
 export class Game {
