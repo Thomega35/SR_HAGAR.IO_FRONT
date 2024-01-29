@@ -22,7 +22,7 @@ export function NameProvider({
 
     useEffect(() => {
         // Generate random name only on the client side
-        setName("Thomas_" + makeid(3));
+        setName((Math.random() < 0.5 ? "Thomas_" : "Yazid_")+ makeid(5));
     }, []); // Empty dependency array ensures it runs only on mount
 
     return (

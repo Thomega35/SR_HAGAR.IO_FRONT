@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-export default function NavBar() {
+export default function NavBar({children}: {children?: React.ReactNode}) {
     return (
         <nav
-            className="rounded-lg shadow bg-[#e0e0e0] max-w-6xl mx-auto p-3 pl-8 pr-8 flex items-center w-full justify-between"       
+            className="shadow bg-[#e0e0e0] p-3 pl-8 pr-8 flex items-center w-full justify-between"    
             style={{
                 boxShadow:
                     "inset 20px 20px 60px #bebebe, inset -20px -20px 60px #ffffff",
@@ -17,6 +17,7 @@ export default function NavBar() {
                     Home
                 </div>
             </Link>
+            {children}
             <Link
                 href="/profile"
             >

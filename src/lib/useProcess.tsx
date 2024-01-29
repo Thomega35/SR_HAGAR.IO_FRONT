@@ -12,18 +12,13 @@ export function useProcess(playerName: string, color: string) {
     useEffect(() => {
         const newGameProcess = new Game(playerName, color);
         setGameProcess(newGameProcess);
-        return () => {
-            newGameProcess.init();
-        }
     }, []);
     
     return gameProcess;
 }
 
 export type Params = {
-    playerName: string;
-    setGame: (game: boolean) => void;
-    setName: (playerName: string) => void;
+    gameProcess : Game
 };
 
 export class Game {
@@ -46,6 +41,7 @@ export class Game {
 
         this.me = new Player(Math.floor(Math.random() *1000), Math.floor(Math.random() *500), 1, playerName, color);
         this.init();
+        console.log(this.me.color);
     }
     
     public init() {
@@ -56,6 +52,10 @@ export class Game {
         // const foods = [[10, 100], [400, 400], [200, 200], [300, 300], [100, 100], [100, 400], [400, 100], [800, 400], [800, 100], [700, 200], [800, 300], [600, 400], [900, 100], [900, 350]];
         this.foods = [new Food(10, 100), new Food(400, 400), new Food(200, 200), new Food(300, 300), new Food(100, 100), new Food(100, 400), new Food(400, 100), new Food(800, 400), new Food(800, 100), new Food(700, 200), new Food(800, 300), new Food(600, 400), new Food(900, 100), new Food(900, 350)];
          
+    }
+
+    public destroy() {
+        this.timeManager.stop();
     }
     
     public draw() {
@@ -68,6 +68,8 @@ export class Game {
         // Draw the players
         this.otherPlayers.forEach(player => {
             ctx.beginPath();
+            ctx.textAlign = "center";
+            ctx.fillText(player.name, player.position.x, player.position.y - player.size - 5);
             ctx.arc(player.position.x, player.position.y, player.size, 0, 2 * Math.PI, false);
             ctx.fillStyle = player.color as string;
             ctx.fill();
@@ -91,7 +93,6 @@ export class Game {
         ctx.beginPath();
         ctx.arc(this.me.position.x, this.me.position.y, this.me.size, 0, 2 * Math.PI, false);
         ctx.fillStyle = this.me.color
-        console.log(this.me.color);
         ctx.fill();
         ctx.lineWidth = 3;
         ctx.strokeStyle = '#003300';
@@ -117,20 +118,20 @@ export class Game {
     // }
 
     public fetch(){
-        // const players = await this.api.getPlayers();
-        // const foods = await this.api.getFoods();
-        this.otherPlayers.push(new Player(Math.floor(Math.random() *1000), Math.floor(Math.random() *500), 1, "Thomas", "red"));
-        this.foods.push(new Food(Math.floor(Math.random() *1000), Math.floor(Math.random() *500)));
+        this.otherPlayers = this.otherPlayers
+        if (Math.random() < 0.1) {
+            this.foods.push(new Food(Math.floor(Math.random() *1000), Math.floor(Math.random() *500)));
+        }
     }
 
-    public update() {
-        const maxSpeed = 4;
+    public update(deltaTime: number) {
+        const maxSpeed = 4*deltaTime*30;
         const maxEatDistance = 4;
    
         //move the player
         if (this.canvasRef) {
             // Calculate the direction vector
-            const directionX = this.mousePosition.x - this.canvasRef.offsetLeft - this.me.position.x;
+            const directionX = this.mousePosition.x - this.me.position.x;
             const directionY = this.mousePosition.y - this.canvasRef.offsetTop - this.me.position.y;
 
             // Calculate the distance to the mouse
@@ -144,18 +145,34 @@ export class Game {
             const movementX = normalizedDirectionX * maxSpeed;
             const movementY = normalizedDirectionY * maxSpeed;
 
-            // Update the player position
-            this.me.position.x += movementX;
-            this.me.position.y += movementY;
+            // Deadzone to prevent the player from shaking
+            if (distanceToMouse > 3) {
+                // Move the player
+                this.me.position.x += movementX;
+                this.me.position.y += movementY;
+            }
         }
 
         // Check if the player is eating a food
         this.foods.forEach((food, index) => {
             const distanceToFood = Math.sqrt(Math.pow(this.me.position.x - food.position.x, 2) + Math.pow(this.me.position.y - food.position.y, 2));
             if (distanceToFood < this.me.size + maxEatDistance) {
-                this.me.size += 1;
+                this.me.setScore(this.me.getScore() + 1);
                 this.foods.splice(index, 1);
             }
         });
+
+        //Check if the player is eating another player
+        this.otherPlayers.forEach((player, index) => {
+            const distanceToPlayer = Math.sqrt(Math.pow(this.me.position.x - player.position.x, 2) + Math.pow(this.me.position.y - player.position.y, 2));
+            if (distanceToPlayer < this.me.size + maxEatDistance && this.me.getScore() > player.getScore() * 1.1) {
+                this.me.setScore(this.me.getScore() + player.getScore());
+                this.otherPlayers.splice(index, 1);
+            }
+        });
     }
+}
+
+export function scoreToSize(score: number) {
+    return Math.sqrt(score*50 / Math.PI) + 3;
 }
