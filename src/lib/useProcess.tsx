@@ -39,16 +39,23 @@ export class Game {
         this.timeManager = new TimeManager();
         this.timeManager.addUpdateMethods(this.update.bind(this));
         this.timeManager.addUpdateMethods(this.draw.bind(this));
+        this.timeManager.addUpdateMethods(this.fetch.bind(this));
         this.timeManager.start();
         this.otherPlayers = []
         this.foods = []
 
         this.me = new Player(Math.floor(Math.random() *1000), Math.floor(Math.random() *500), 1, playerName, color);
+        this.init();
     }
     
     public init() {
         this.otherPlayers  = [];
         this.foods = [];
+        // const players = [[300,200,12,"Thomas", "red"], [400,200,4,"Yazid", "blue"], [400,300,20,"Camille", "yellow"]];
+        this.otherPlayers = [new Player(300,200,12,"Thomas", "red"), new Player(400,200,4,"Yazid", "blue"), new Player(400,300,20,"Camille", "yellow")];
+        // const foods = [[10, 100], [400, 400], [200, 200], [300, 300], [100, 100], [100, 400], [400, 100], [800, 400], [800, 100], [700, 200], [800, 300], [600, 400], [900, 100], [900, 350]];
+        this.foods = [new Food(10, 100), new Food(400, 400), new Food(200, 200), new Food(300, 300), new Food(100, 100), new Food(100, 400), new Food(400, 100), new Food(800, 400), new Food(800, 100), new Food(700, 200), new Food(800, 300), new Food(600, 400), new Food(900, 100), new Food(900, 350)];
+         
     }
     
     public draw() {
@@ -109,15 +116,46 @@ export class Game {
     //     this.api = api;
     // }
 
+    public fetch(){
+        // const players = await this.api.getPlayers();
+        // const foods = await this.api.getFoods();
+        this.otherPlayers.push(new Player(Math.floor(Math.random() *1000), Math.floor(Math.random() *500), 1, "Thomas", "red"));
+        this.foods.push(new Food(Math.floor(Math.random() *1000), Math.floor(Math.random() *500)));
+    }
+
     public update() {
-        // const players = [[300,200,12,"Thomas", "red"], [400,200,4,"Yazid", "blue"], [400,300,20,"Camille", "yellow"]];
-        this.otherPlayers = [new Player(300,200,12,"Thomas", "red"), new Player(400,200,4,"Yazid", "blue"), new Player(400,300,20,"Camille", "yellow")];
-        // const foods = [[10, 100], [400, 400], [200, 200], [300, 300], [100, 100], [100, 400], [400, 100], [800, 400], [800, 100], [700, 200], [800, 300], [600, 400], [900, 100], [900, 350]];
-        this.foods = [new Food(10, 100), new Food(400, 400), new Food(200, 200), new Food(300, 300), new Food(100, 100), new Food(100, 400), new Food(400, 100), new Food(800, 400), new Food(800, 100), new Food(700, 200), new Food(800, 300), new Food(600, 400), new Food(900, 100), new Food(900, 350)];
-    
+        const maxSpeed = 4;
+        const maxEatDistance = 4;
+   
+        //move the player
         if (this.canvasRef) {
-            this.me.position.x = this.mousePosition.x - this.canvasRef.offsetLeft;
-            this.me.position.y = this.mousePosition.y - this.canvasRef.offsetTop;
+            // Calculate the direction vector
+            const directionX = this.mousePosition.x - this.canvasRef.offsetLeft - this.me.position.x;
+            const directionY = this.mousePosition.y - this.canvasRef.offsetTop - this.me.position.y;
+
+            // Calculate the distance to the mouse
+            const distanceToMouse = Math.sqrt(directionX * directionX + directionY * directionY);
+
+            // Normalize the direction vector to get a unit vector
+            const normalizedDirectionX = directionX / distanceToMouse;
+            const normalizedDirectionY = directionY / distanceToMouse;
+
+            // Calculate the movement vector with maximum speed
+            const movementX = normalizedDirectionX * maxSpeed;
+            const movementY = normalizedDirectionY * maxSpeed;
+
+            // Update the player position
+            this.me.position.x += movementX;
+            this.me.position.y += movementY;
         }
+
+        // Check if the player is eating a food
+        this.foods.forEach((food, index) => {
+            const distanceToFood = Math.sqrt(Math.pow(this.me.position.x - food.position.x, 2) + Math.pow(this.me.position.y - food.position.y, 2));
+            if (distanceToFood < this.me.size + maxEatDistance) {
+                this.me.size += 1;
+                this.foods.splice(index, 1);
+            }
+        });
     }
 }

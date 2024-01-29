@@ -10,7 +10,7 @@ export function Canvas(params: Params) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const cursorScreen = useMouseOn(canvasRef)
     const {playerName, setGame} = params;
-    const gameProcess = useProcess(playerName, "red");
+    const gameProcess = useProcess(playerName, "blue");
 
     // gameProcess?.draw(500, 250, 10, "green");
     // gameProcess?.update();
