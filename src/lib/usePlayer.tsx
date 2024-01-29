@@ -1,12 +1,12 @@
 export class Player {
     position : Position;
-    value : number;
+    size : number;
     name : string;
     color : string;
 
-    constructor(x: number, y: number, value: number, name: string, color: string) {
+    constructor(x: number, y: number, size: number, name: string, color: string) {
         this.position = {x: x, y: y};
-        this.value = value;
+        this.size = size;
         this.name = name;
         this.color = color;
     }

@@ -54,7 +54,7 @@ export default function HomePage() {
         <main className="max-w-6xl mx-auto h-full w-full">
           <Navbar></Navbar>
           <div className="flex  flex-col items-center justify-center ">
-            <Canvas setGame={setGame} name={name} setName={setName}></Canvas>
+            <Canvas setGame={setGame} playerName={name} setName={setName}></Canvas>
           </div>
         </main>
       </div>
