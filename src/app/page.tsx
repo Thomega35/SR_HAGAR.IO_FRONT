@@ -5,19 +5,36 @@ import { useName } from "~/components/name-context";
 import Navbar from "../components/navbar";
 import { useState } from "react";
 import { Canvas } from "./canvas";
-import { useProcess } from "~/lib/useProcess";
+import { Game } from "~/lib/Game";
 
 export default function HomePage() {
-  const { name, setName } = useName();
+  const { name } = useName();
   const [game, setGame] = useState(false);
-  const gameProcess = useProcess(name, "blue");
+  const [currentGame, setCurrentGame] = useState<Game | undefined>(undefined);
+
+  function handleGameStartStop(toStart: boolean) {
+    if (toStart) {
+      if (currentGame){
+        currentGame.destroy();
+      }
+      setCurrentGame(Game.getInstanceOfGame(name, "red"));
+      setGame(true);
+    }
+    else {
+      if (currentGame){
+        currentGame.destroy();
+      }
+      setCurrentGame(undefined);
+      setGame(false);
+    }
+  }
 
 
   if (!game) {
     return (
       <div className="bg-gradient-to-br min-h-screen from-red-400 via-yel low-400 to-purple-600 h-full w-full">
         <Navbar>
-          <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl" onClick={() => setGame(true)}>Start Game</button>
+          <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl" onClick={() => handleGameStartStop(true)}>Start Game</button>
         </Navbar>
         <div className="flex  flex-col items-center justify-center ">
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-10 ">
@@ -53,10 +70,10 @@ export default function HomePage() {
   } else {
     return (
       <div className="bg-gradient-to-br min-h-screen from-red-400 via-yel low-400 to-purple-600 h-full w-full flex flex-col">
-          <Navbar>
-            <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl" onClick={() => setGame(false)}>Stop Game</button>
-          </Navbar>
-          <Canvas gameProcess={gameProcess!}></Canvas>
+        <Navbar>
+          <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl" onClick={() => handleGameStartStop(false)}>Stop Game</button>
+        </Navbar>
+        <Canvas gameProcess={currentGame!}></Canvas>
       </div>
     );
   }

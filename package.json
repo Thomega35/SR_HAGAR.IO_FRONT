@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.7.1",
+    "@types/uuid": "^9.0.8",
     "next": "^14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "socket.io-client": "^4.7.4",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

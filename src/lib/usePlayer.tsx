@@ -1,4 +1,5 @@
-import { scoreToSize } from "./useProcess";
+import { scoreToSize } from "./Game";
+import { v4 } from "uuid";
 
 export class Player {
     position : Position;
@@ -6,6 +7,7 @@ export class Player {
     size : number;
     name : string;
     color : string;
+    id : string;
 
     constructor(x: number, y: number, score: number, name: string, color: string) {
         this.position = {x: x, y: y};
@@ -14,19 +16,17 @@ export class Player {
         this.size = scoreToSize(score); 
         this.name = name;
         this.color = color;
+        this.id = v4();
     }
 
     public setScore(score: number) {
         this.score = score;
         this.size = scoreToSize(score);
+        console.log(score, this.size);
     }
-
+    
     public getScore() {
         return this.score;
-    }
-
-    destroy() {
-        console.log("Player destroyed");
     }
 }
 

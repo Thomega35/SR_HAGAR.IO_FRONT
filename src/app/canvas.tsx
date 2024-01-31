@@ -1,5 +1,5 @@
 "use client";
-import type { Game, Params } from '~/lib/useProcess';
+import type { Params } from '~/lib/Game';
 import { useEffect, useRef } from 'react';
 import { useMouseOn } from '~/lib/useMouse';
 
@@ -7,9 +7,6 @@ export function Canvas(params: Params) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const cursorScreen = useMouseOn(canvasRef)
     const {gameProcess} = params;
-
-    // gameProcess?.draw(500, 250, 10, "green");
-    // gameProcess?.update();
 
     useEffect(() => {
         if (!gameProcess) return;
@@ -32,7 +29,8 @@ export function Canvas(params: Params) {
         const c = canvasRef.current?.getContext('2d');
         if (!c) return;
         gameProcess.setContext(c);
-    },);
+        gameProcess.setSocket("localhost:3003");
+    }, [] );
 
     return (
         <canvas className="bg-gray-50 fixed mt-20 grow" ref={canvasRef} width="1000" height="500"></canvas>
