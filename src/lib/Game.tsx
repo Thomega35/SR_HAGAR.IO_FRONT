@@ -37,7 +37,8 @@ export class Game {
         this.foods = new Map();
 
         this.me = new Player(Math.floor(Math.random() * 1000), Math.floor(Math.random() * 500), 1, playerName, color);
-        this.setSocket("http://sr.thomega.fr:3003");
+        // this.setSocket("http://back.thomega.fr:3003");
+        this.setSocket("http://92.167.217.78:3003");
     }
 
     public draw() {
