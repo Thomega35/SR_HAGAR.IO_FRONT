@@ -9,14 +9,14 @@ export class Player {
     color : string;
     id : string;
 
-    constructor(x: number, y: number, score: number, name: string, color: string) {
+    constructor(x: number, y: number, score: number, name: string, color: string, id: string=v4()) {
         this.position = {x: x, y: y};
         this.score = score;
         // sqrt score / pi
         this.size = scoreToSize(score); 
         this.name = name;
         this.color = color;
-        this.id = v4();
+        this.id = id;
     }
 
     public setScore(score: number) {

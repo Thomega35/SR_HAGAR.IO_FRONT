@@ -4,6 +4,7 @@ import { Food } from "./useFood";
 import { Player } from "./usePlayer";
 import { TimeManager } from "./timeManager";
 import { io, Socket } from "socket.io-client";
+import HomePage from "~/app/page";
 
 export type Params = {
     gameProcess: Game
@@ -31,13 +32,13 @@ export class Game {
         this.timeManager = new TimeManager();
         this.timeManager.addUpdateMethods(this.update.bind(this));
         this.timeManager.addUpdateMethods(this.draw.bind(this));
-        this.timeManager.addUpdateMethods(this.fetch.bind(this));
         this.timeManager.start();
-        
+
         this.players = []
         this.foods = new Map();
-        
+
         this.me = new Player(Math.floor(Math.random() * 1000), Math.floor(Math.random() * 500), 1, playerName, color);
+        this.setSocket("localhost:3003");
     }
 
     public draw() {
@@ -45,8 +46,10 @@ export class Game {
         if (!this.canvasRef) return;
         const canvas = this.canvasRef;
         const ctx = canvas.getContext('2d');
+
         if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.reset();
+
         // Draw the players
         this.players.forEach(player => {
             ctx.beginPath();
@@ -85,30 +88,33 @@ export class Game {
         this.ctx.imageSmoothingEnabled = false;
     }
 
-    public setSocket(serverUrl : string) {
+    public setSocket(serverUrl: string) {
         this.socket = io(serverUrl, { autoConnect: true });
-        this.socket.emit("newPlayer", this.me.id, this.me.name, this.me.color );
+        this.socket.emit("newPlayer", this.me.id, this.me.name, this.me.color);
+
         this.socket?.on("newPlayerPosition", (x: number, y: number) => {
             this.me.position.x = x;
             this.me.position.y = y;
         });
-    }
-
-    public fetch() {
 
         this.socket?.on("updatePlayers", (players: Map<string, PlayerObj>) => {
             this.players = [];
-            console.log(players, this.me.id);
+            console.log(players);
+            let found = false;
             for (let [key, player] of players) {
                 if (key == this.me.id) {
-                    console.log(player);
+                    // console.log(player);
                     this.me.position.x = player.x;
                     this.me.position.y = player.y;
                     this.me.setScore(player.score);
-                }else{
-                    this.players.push(new Player(player.x, player.y, player.score, player.name, player.color));
+                    found = true;
                 }
+                this.players.push(new Player(player.x, player.y, player.score, player.name, player.color, key));
             };
+            if (!found) {
+                console.log("player not found");
+
+            }
         });
 
         this.socket?.on("updateFood", (foods: Map<string, Food>) => {
@@ -119,6 +125,7 @@ export class Game {
     public update(deltaTime: number) {
         const maxSpeed = 4 * deltaTime * 30;
         const maxEatDistance = 4;
+        console.log(this.timeManager.FPS)
 
         //move the player
         if (this.canvasRef) {
@@ -142,7 +149,7 @@ export class Game {
                 // Move the player
                 this.me.position.x += movementX;
                 this.me.position.y += movementY;
-                
+
                 // Send the new position to the server
                 if (this.socket) {
                     this.socket?.emit("move", this.me.id, this.me.position.x, this.me.position.y);
@@ -152,7 +159,7 @@ export class Game {
 
         // Check if the player is eating a food
         for (let [key, value] of this.foods) {
-            const distanceToFood = Math.sqrt(Math.pow(this.me.position.x - value.x, 2) + Math.pow(this.me.position.y - value.y, 2));
+            const distanceToFood = distanceBetween(this.me.position.x, this.me.position.y, value.x, value.y);
             if (distanceToFood < this.me.size + maxEatDistance) {
                 this.socket?.emit("eatFood", this.me.id, key);
                 console.log(this.me.getScore(), this.me.size);
@@ -160,10 +167,13 @@ export class Game {
         };
 
         //Check if the player is eating another player
-        this.players.forEach((player, index) => {
-            const distanceToPlayer = Math.sqrt(Math.pow(this.me.position.x - player.position.x, 2) + Math.pow(this.me.position.y - player.position.y, 2));
+        this.players.forEach((player) => {
+            console.log("my id", this.me.id);   
+            console.log(this.players)
+            const distanceToPlayer = distanceBetween(this.me.position.x, this.me.position.y, player.position.x, player.position.y);
             if (distanceToPlayer < this.me.size + maxEatDistance && this.me.getScore() > player.getScore() * 1.1 && this.me.id !== player.id) {
-                // this.me.setScore(this.me.getScore() + player.getScore());
+                this.socket?.emit("eatPlayer", this.me.id, player.id);
+                console.log("eat player", player.id);
             }
         });
     }
@@ -177,7 +187,11 @@ export class Game {
 }
 
 export function scoreToSize(score: number) {
-    return Math.sqrt(score*50 / Math.PI) + 3;
+    return Math.sqrt(score * 50 / Math.PI) + 3;
+}
+
+export function distanceBetween(x1: number, y1: number, x2: number, y2: number) {
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
 interface PlayerObj {

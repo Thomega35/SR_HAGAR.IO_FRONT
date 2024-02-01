@@ -29,7 +29,6 @@ export function Canvas(params: Params) {
         const c = canvasRef.current?.getContext('2d');
         if (!c) return;
         gameProcess.setContext(c);
-        gameProcess.setSocket("localhost:3003");
     }, [] );
 
     return (
