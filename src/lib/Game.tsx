@@ -1,9 +1,10 @@
 "use client"; // This is a client component 👈🏽
 
-import { Food } from "./useFood";
+import type { Food } from "./useFood";
 import { Player } from "./usePlayer";
 import { TimeManager } from "./timeManager";
-import { io, Socket } from "socket.io-client";
+import type { Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 
 export type Params = {
     gameProcess: Game
@@ -64,7 +65,7 @@ export class Game {
         });
 
         // Draw the food
-        for (const [uuid, food] of this.foods) {
+        for (const [, food] of this.foods) {
             ctx.beginPath();
             ctx.arc(food.x, food.y, 4, 0, 2 * Math.PI, false);
             ctx.fillStyle = 'green';
@@ -100,7 +101,7 @@ export class Game {
         this.socket?.on("updatePlayers", (players: Map<string, PlayerObj>) => {
             this.players = [];
             let found = false;
-            for (let [key, player] of players) {
+            for (const [key, player] of players) {
                 if (key == this.me.id) {
                     this.me.position.x = player.x;
                     this.me.position.y = player.y;
@@ -155,7 +156,7 @@ export class Game {
         }
 
         // Check if the player is eating a food
-        for (let [key, value] of this.foods) {
+        for (const [key, value] of this.foods) {
             const distanceToFood = distanceBetween(this.me.position.x, this.me.position.y, value.x, value.y);
             if (distanceToFood < this.me.size + maxEatDistance) {
                 this.socket?.emit("eatFood", this.me.id, key);
