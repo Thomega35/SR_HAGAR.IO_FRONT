@@ -79,17 +79,6 @@ export class Game {
             ctx.stroke();
         };
 
-        // Draw the malicious food
-        for (const [, food] of this.maliciousFoods) {
-            ctx.beginPath();
-            ctx.arc(food.x, food.y, 4, 0, 2 * Math.PI, false);
-            ctx.fillStyle = 'lightgreen';
-            ctx.fill();
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#003300';
-            ctx.stroke();
-        };
-
         // Draw me
         ctx.beginPath();
         ctx.textAlign = "center";
@@ -100,7 +89,38 @@ export class Game {
         ctx.lineWidth = 3;
         ctx.strokeStyle = '#003300';
         ctx.stroke();
-        
+
+        // Draw the malicious food
+        for (const [, food] of this.maliciousFoods) {
+            ctx.beginPath();
+            ctx.arc(food.x, food.y, 30, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'lightgreen';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#003300';
+            ctx.stroke();
+        };
+
+        // Draw the score top right
+        ctx.beginPath();
+        ctx.textAlign = "right";
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black";
+        let i = 1;
+        //sort the players by score
+        let scores = this.players.map(player => [player.name,player.getScore()]);
+        scores.push([this.me.name, this.me.getScore()]);
+        scores.sort((a, b) => Number(b[1]) - Number(a[1]));
+        for (const player of scores) {
+            if (player[0] == this.me.name) {
+                ctx.fillStyle = "red";
+            } else {
+                ctx.fillStyle = "black";
+            }
+            ctx.fillText(player[0] + " : " + player[1], canvas.width - 10, 30*i);
+            i++;
+        }
+
     }
 
     public setCursor(mousePosition: { x: number; y: number; }) {
@@ -148,6 +168,10 @@ export class Game {
 
         this.socket?.on("updateFood", (foods: Map<string, Food>) => {
             this.foods = foods
+        });
+
+        this.socket?.on("updateMaliciousFood", (maliciousFoods: Map<string, Food>) => {
+            this.maliciousFoods = maliciousFoods
         });
     }
 
@@ -203,6 +227,15 @@ export class Game {
                 console.log(this.me.getScore(), this.me.size);
             }
         };
+
+        // Check if the player is eating a malicious food
+        for (const [key, value] of this.maliciousFoods) {
+            const distanceToFood = distanceBetween(this.me.position.x, this.me.position.y, value.x, value.y);
+            if (distanceToFood < this.me.size + maxEatDistance && this.me.getScore() > 30) {
+                this.socket?.emit("eatMaliciousFood", this.me.id, key);
+                console.log("eat malicious food", key);
+            }
+        }
 
         //Check if the player is eating another player
         this.players.forEach((player) => {
