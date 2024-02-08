@@ -33,7 +33,7 @@ export default function HomePage() {
   if (!game) {
     return (
       <div className="bg-gradient-to-br min-h-screen from-red-400 via-yel low-400 to-purple-600 h-full w-full">
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
         <Navbar>
           <button className="text-2xl font-bold bg-white p-3 shadow rounded-xl" onClick={() => handleGameStartStop(true)}>Start Game</button>
         </Navbar>
