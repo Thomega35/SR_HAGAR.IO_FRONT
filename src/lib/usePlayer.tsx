@@ -22,7 +22,6 @@ export class Player {
     public setScore(score: number) {
         this.score = score;
         this.size = scoreToSize(score);
-        console.log(score, this.size);
     }
     
     public getScore() {

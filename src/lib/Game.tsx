@@ -173,7 +173,7 @@ export class Game {
             const movementY = normalizedDirectionY * maxSpeed;
 
             // Lower speed base on the size of the player
-            const speedMultiplier = 0.8 / 2**((this.me.size-1)/5)
+            const speedMultiplier = 0.5 / 2**((this.me.size-1)/5)
             console.log("speed "+speedMultiplier);
             this.me.position.x += movementX * speedMultiplier;
             this.me.position.y += movementY * speedMultiplier;
