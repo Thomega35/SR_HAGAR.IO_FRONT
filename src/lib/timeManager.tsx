@@ -5,7 +5,6 @@ export class TimeManager {
     private updateMethods: Array<(deltaTime: number) => void> = [];
 
     FPS = 0;
-    TPS = 0;
 
     start() {
         this.lastUpdate = performance.now();
@@ -13,7 +12,6 @@ export class TimeManager {
         this.deltaT = 1;
 
         this.FPS = 0;
-        this.TPS = 0;
 
         requestAnimationFrame(this.update.bind(this));
     }
