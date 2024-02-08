@@ -79,6 +79,17 @@ export class Game {
             ctx.stroke();
         };
 
+        // Draw the malicious food
+        for (const [, food] of this.maliciousFoods) {
+            ctx.beginPath();
+            ctx.arc(food.x, food.y, 4, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'lightgreen';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#003300';
+            ctx.stroke();
+        };
+
         // Draw me
         ctx.beginPath();
         ctx.textAlign = "center";
@@ -162,7 +173,8 @@ export class Game {
             const movementY = normalizedDirectionY * maxSpeed;
 
             // Lower speed base on the size of the player
-            const speedMultiplier = 1 / Math.log(this.me.size*4);
+            const speedMultiplier = 0.8 / 2**((this.me.size-1)/5)
+            console.log("speed "+speedMultiplier);
             this.me.position.x += movementX * speedMultiplier;
             this.me.position.y += movementY * speedMultiplier;
 
@@ -206,6 +218,7 @@ export class Game {
         this.socket?.emit("Leave", this.me.id);
         this.socket?.disconnect();
         this.timeManager.stop();
+        console.log("Game destroyed");
     }
 
 }
