@@ -13,6 +13,7 @@ export type Params = {
 export class Game {
     private players: Player[];
     private foods: Map<string, Food>;
+    private maliciousFoods: Map<string, Food>;
     private canvasRef: HTMLCanvasElement | null = null;
     private mousePosition: { x: number; y: number; } = { x: 0, y: 0 };
     private ctx: CanvasRenderingContext2D | undefined;
@@ -36,9 +37,11 @@ export class Game {
 
         this.players = []
         this.foods = new Map();
+        this.maliciousFoods = new Map();
 
         this.me = new Player(Math.floor(Math.random() * 1000), Math.floor(Math.random() * 500), 1, playerName, color);
-        this.setSocket("http://back.thomega.fr");
+        this.setSocket("back.thomega.fr");
+        console.log("Game created");
     }
 
     public draw() {
@@ -52,15 +55,17 @@ export class Game {
 
         // Draw the players
         this.players.forEach(player => {
-            ctx.beginPath();
-            ctx.textAlign = "center";
-            ctx.fillText(player.name, player.position.x, player.position.y - player.size - 5);
-            ctx.arc(player.position.x, player.position.y, player.size, 0, 2 * Math.PI, false);
-            ctx.fillStyle = player.color as string;
-            ctx.fill();
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#003300';
-            ctx.stroke();
+            if (player.id !== this.me.id) {
+                ctx.beginPath();
+                ctx.textAlign = "center";
+                ctx.fillText(player.name, player.position.x, player.position.y - player.size - 5);
+                ctx.arc(player.position.x, player.position.y, player.size, 0, 2 * Math.PI, false);
+                ctx.fillStyle = player.color as string;
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#003300';
+                ctx.stroke();
+            }
         });
 
         // Draw the food
@@ -73,6 +78,18 @@ export class Game {
             ctx.strokeStyle = '#003300';
             ctx.stroke();
         };
+
+        // Draw me
+        ctx.beginPath();
+        ctx.textAlign = "center";
+        ctx.fillText(this.me.name, this.me.position.x, this.me.position.y - this.me.size - 5);
+        ctx.arc(this.me.position.x, this.me.position.y, this.me.size, 0, 2 * Math.PI, false);
+        ctx.fillStyle = this.me.color as string;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#003300';
+        ctx.stroke();
+        
     }
 
     public setCursor(mousePosition: { x: number; y: number; }) {
@@ -89,7 +106,7 @@ export class Game {
     }
 
     public setSocket(serverUrl: string) {
-        this.socket = io(serverUrl, { autoConnect: true });
+        this.socket = io(serverUrl, { autoConnect: true, transports: ["websocket"] });
         this.socket.emit("newPlayer", this.me.id, this.me.name, this.me.color);
 
         this.socket?.on("newPlayerPosition", (x: number, y: number) => {
@@ -102,16 +119,19 @@ export class Game {
             let found = false;
             for (const [key, player] of players) {
                 if (key == this.me.id) {
-                    this.me.position.x = player.x;
-                    this.me.position.y = player.y;
                     this.me.setScore(player.score);
                     found = true;
+                    if (Math.random() < 0.01) {
+                        this.me.position.x = player.x;
+                        this.me.position.y = player.y;
+                    }
+                }else{
+                    this.players.push(new Player(player.x, player.y, player.score, player.name, player.color, key));
                 }
-                this.players.push(new Player(player.x, player.y, player.score, player.name, player.color, key));
             };
             if (!found) {
                 console.log("player not found");
-
+                this.me.color = "black"
             }
         });
 
@@ -141,11 +161,20 @@ export class Game {
             const movementX = normalizedDirectionX * maxSpeed;
             const movementY = normalizedDirectionY * maxSpeed;
 
+            // Lower speed base on the size of the player
+            const speedMultiplier = 1 / Math.log(this.me.size*4);
+            this.me.position.x += movementX * speedMultiplier;
+            this.me.position.y += movementY * speedMultiplier;
+
             // Deadzone to prevent the player from shaking
             if (distanceToMouse > 3) {
                 // Move the player
                 this.me.position.x += movementX;
+                if (this.me.position.x < 0) this.me.position.x = 0;
+                if (this.me.position.x > 1000) this.me.position.x = 1000;
                 this.me.position.y += movementY;
+                if (this.me.position.y < 0) this.me.position.y = 0;
+                if (this.me.position.y > 1000) this.me.position.y = 1000;
 
                 // Send the new position to the server
                 if (this.socket) {
