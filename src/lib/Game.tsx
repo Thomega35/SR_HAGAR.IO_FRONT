@@ -108,7 +108,7 @@ export class Game {
         ctx.fillStyle = "black";
         let i = 1;
         //sort the players by score
-        let scores = this.players.map(player => [player.name,player.getScore()]);
+        const scores = this.players.map(player => [player.name,player.getScore()]);
         scores.push([this.me.name, this.me.getScore()]);
         scores.sort((a, b) => Number(b[1]) - Number(a[1]));
         for (const player of scores) {
