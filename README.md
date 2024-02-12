@@ -4,18 +4,31 @@
    <img src="https://img.shields.io/badge/v3.6.0-Tailwind-red" alt="Tailwind">
     <img src="https://img.shields.io/badge/v1.0.0-NodeJs-green" alt="NodeJs">
    <img src="https://img.shields.io/badge/v2.1.3-NextJs-orange" alt="NextJs">
-   <img src="https://img.shields.io/badge/v1.0.0-ReactJs-blue" alt="ReactJs">
+   <img src="https://img.shields.io/badge/v1.0.0-React-blue" alt="ReactJs">
 </p>
 <h3 align="left">
     <b>Autors : </b> <a href="https://github.com/Thomega35/">Thomas DELAPART</a> & <a href="https://github.com/Xacone">Yazid BENJAMAA</a>
 </h4>
 
-> Le projet est accessible sur le site : [Client](https://sr.thomega.fr/) 
->
+> Le client du projet déployé sur Vercel est disponible à l'adresse : [sr.thomega.fr](https://sr.thomega.fr/)
+> 
+> Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.md](rapport_yazid_benjamaa.md) qui sont disponibles à la racine du projet.
 
-# Présentation du Projet 🤖
+# Développement du Projet 🤖
 
-- Le projet est généré avec [t3.create](https://create.t3.gg/)
+- Pour ce projet, nous sommes partis d'une base générée avec [t3.create](https://create.t3.gg/) nous permettant d'avoir une base pour le développement de notre projet avec les technologies suivantes : 
+  - [Next.js](https://nextjs.org)
+  - [Tailwind CSS](https://tailwindcss.com)
+  - [Typescript](https://www.typescriptlang.org)
+  - [React](https://reactjs.org)
+- Nous avons ensuite développé la fonctionnalité de profil utilisateur, afin de person,aliser son nom.
+- Ensuite, nous avons développé la partie graphique du jeu, avec un canva, le dessin des joueurs et de la nourriture.
+- Nous nous sommes ensuite occupés de la logique du jeu, avec la gestion des collisions, des déplacements, de la consommation de la nourriture.
+- Enfin, nous avons ajouté le back-end pour gérer la liste des joueurs connectés, la nourriture commune à tous les joueurs, et la communication en temps réel entre les joueurs.
+- Nous avons fini par l'ajout d'un écran des scores, un écran de fin de partie, et la correction de quelques bugs.
+
+# Description du projet 📝
+
 - Le projet est un jeu multijoueur en ligne, le but est de manger les autres joueurs pour devenir le plus gros possible.
 
 
