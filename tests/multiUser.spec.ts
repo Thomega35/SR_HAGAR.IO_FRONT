@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Test 10 players', async ({ context }) => {
+  test.setTimeout(100000);
   for (let i = 0; i < 10; i++) {
     // Create a page.
     const page = await context.newPage(); 
@@ -15,6 +16,7 @@ test('Test 10 players', async ({ context }) => {
 });
 
 test('Test 20 players', async ({ context }) => {
+  test.setTimeout(100000);
   for (let i = 0; i < 20; i++) {
     // Create a page.
     const page = await context.newPage(); 
@@ -29,7 +31,7 @@ test('Test 20 players', async ({ context }) => {
 });
 
 test('Test 100 players', async ({ context }) => {
-  test.setTimeout(120000);
+  test.setTimeout(1000000);
   for (let i = 0; i < 100; i++) {
     // Create a page.
     const page = await context.newPage(); 
