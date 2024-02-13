@@ -1,17 +1,11 @@
-export class TimeManager {
+export class TickUpdater {
     private lastUpdate = performance.now();
-    private tickCount = 0;
     private deltaT = 1;
     private updateMethods: Array<(deltaTime: number) => void> = [];
 
-    FPS = 0;
-
     start() {
         this.lastUpdate = performance.now();
-        this.tickCount = 0;
         this.deltaT = 1;
-
-        this.FPS = 0;
 
         requestAnimationFrame(this.update.bind(this));
     }
@@ -29,10 +23,7 @@ export class TimeManager {
         const currentTime = performance.now();
         this.deltaT = (currentTime - this.lastUpdate) / 1000;
         this.lastUpdate = currentTime;
-        this.tickCount++;
         this.updateMethods.forEach((method) => method(this.deltaT));
-        const rawFPS = 1 / this.deltaT;
-        this.FPS = 0.99 * this.FPS + 0.01 * rawFPS; // smooth FPS
 
         requestAnimationFrame(this.update.bind(this));
     }

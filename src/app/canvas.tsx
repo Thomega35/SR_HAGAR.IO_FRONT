@@ -1,11 +1,11 @@
 "use client";
 import type { Params } from '~/lib/Game';
 import { useEffect, useRef } from 'react';
-import { useMouseOn } from '~/lib/useMouse';
+import { MouseOn } from '~/lib/Mouse';
 
 export function Canvas(params: Params) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const cursorScreen = useMouseOn(canvasRef)
+    const cursorScreen = MouseOn(canvasRef)
     const {gameProcess} = params;
 
     useEffect(() => {

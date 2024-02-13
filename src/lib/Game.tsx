@@ -1,10 +1,9 @@
 "use client"; // This is a client component 👈🏽
-
-import type { Food } from "./useFood";
-import { Player } from "./usePlayer";
-import { TimeManager } from "./timeManager";
+import { TickUpdater } from "./tickUpdater";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
+import { v4 } from "uuid";
+
 
 export type Params = {
     gameProcess: Game
@@ -17,7 +16,7 @@ export class Game {
     private canvasRef: HTMLCanvasElement | null = null;
     private mousePosition: { x: number; y: number; } = { x: 0, y: 0 };
     private ctx: CanvasRenderingContext2D | undefined;
-    private timeManager: TimeManager;
+    private tickUpdater: TickUpdater;
     private me: Player;
     private socket: Socket | undefined = undefined;
     private static instanceOfGame: Game | undefined = undefined;
@@ -30,10 +29,10 @@ export class Game {
     }
 
     private constructor(playerName: string, color: string) {
-        this.timeManager = new TimeManager();
-        this.timeManager.addUpdateMethods(this.update.bind(this));
-        this.timeManager.addUpdateMethods(this.draw.bind(this));
-        this.timeManager.start();
+        this.tickUpdater = new TickUpdater();
+        this.tickUpdater.addUpdateMethods(this.update.bind(this));
+        this.tickUpdater.addUpdateMethods(this.draw.bind(this));
+        this.tickUpdater.start();
 
         this.players = []
         this.foods = new Map();
@@ -250,7 +249,7 @@ export class Game {
     public destroy() {
         this.socket?.emit("Leave", this.me.id);
         this.socket?.disconnect();
-        this.timeManager.stop();
+        this.tickUpdater.stop();
         console.log("Game destroyed");
     }
 
@@ -270,4 +269,48 @@ interface PlayerObj {
     score: number;
     name: string;
     color: string;
+}
+
+class Player {
+    position : Position;
+    private score : number
+    size : number;
+    name : string;
+    color : string;
+    id : string;
+
+    constructor(x: number, y: number, score: number, name: string, color: string, id: string=v4()) {
+        this.position = {x: x, y: y};
+        this.score = score;
+        // sqrt score / pi
+        this.size = scoreToSize(score); 
+        this.name = name;
+        this.color = color;
+        this.id = id;
+    }
+
+    public setScore(score: number) {
+        this.score = score;
+        this.size = scoreToSize(score);
+    }
+    
+    public getScore() {
+        return this.score;
+    }
+}
+
+
+type Position = {
+    x: number;
+    y: number;
+};
+
+class Food {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
 }
