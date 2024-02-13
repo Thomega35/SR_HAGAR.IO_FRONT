@@ -16,7 +16,7 @@
 >
 > Le backend du projet déployé sur ma machine personnelle est dans ce repository : [Hagar.io_Backend](https://github.com/Thomega35/SR_HAGAR.IO_BACK)
 > 
-> Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.pdf](rapport_yazid_benjamaa.pdf) qui sont disponibles à la racine du projet.
+> Nos rapports individuels les deux fichiers [rapport_thomas_delapart.pdf](rapport_thomas_delapart.pdf) et [rapport_yazid_benjamaa.pdf](rapport_yazid_benjamaa.pdf) qui sont disponibles à la racine du projet.
 
 # Présentation du Projet 🤖 
 
@@ -65,7 +65,7 @@ npm run start
 
 L'une des particularités de ce projet est que la totalité des calculs du jeu sont effectués côté client pour une expérience de jeu fluide et réactive. Le serveur ne sert que pour la communication entre les joueurs et la mise à jour des scores. (Toutefois, le serveur est capable de gérer les cas de triches et les mises à jour des scores en cas de déconnexion du joueur.)
 
-Notre serveur est donc bien plus léger qu'un jeu orchestrer par un serveur et peut supporter un grand nombre de joueurs simultanément. Cette information a été validée par des tests de charge effectués.
+Notre serveur est donc bien plus léger qu'un jeu orchestré par un serveur et peut supporter un grand nombre de joueurs simultanément. Cette information a été validée par des tests de charge effectués.
 
 
 # Architecture du projet 🏗️
