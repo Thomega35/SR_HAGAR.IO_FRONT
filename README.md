@@ -13,6 +13,8 @@
 
 
 > Le client du projet déployé sur Vercel est disponible à l'adresse : [sr.thomega.fr](https://sr.thomega.fr/)
+>
+> Le backend du projet déployé sur ma machine personnelle est dans ce repository : [Hagar.io_Backend](https://github.com/Thomega35/SR_HAGAR.IO_BACK)
 > 
 > Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.pdf](rapport_yazid_benjamaa.pdf) qui sont disponibles à la racine du projet.
 
