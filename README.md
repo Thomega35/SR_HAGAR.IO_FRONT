@@ -1,4 +1,5 @@
-<h1 align="center">TP PROJET SR - HAGAR.IO FRONTEND </h1>
+<h1 align="center">TP PROJET SR <img src="public/favicon.ico" alt="2021-2022"> HAGAR.IO FRONTEND </h1>
+
 <p align="center">
    <img src="https://img.shields.io/badge/v5.3.3-Typescript-blue" alt="Typescript">
    <img src="https://img.shields.io/badge/v3.6.0-Tailwind-red" alt="Tailwind">
@@ -8,13 +9,14 @@
 </p>
 <h3 align="left">
     <b>Autors : </b> <a href="https://github.com/Thomega35/">Thomas DELAPART</a> & <a href="https://github.com/Xacone">Yazid BENJAMAA</a>
-</h4>
+</h3>
+
 
 > Le client du projet déployé sur Vercel est disponible à l'adresse : [sr.thomega.fr](https://sr.thomega.fr/)
 > 
-> Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.md](rapport_yazid_benjamaa.md) qui sont disponibles à la racine du projet.
+> Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.pdf](rapport_yazid_benjamaa.pdf) qui sont disponibles à la racine du projet.
 
-# Développement du Projet 🤖
+# Développement du Projet 🤖 
 
 - Pour ce projet, nous sommes partis d'une base générée avec [t3.create](https://create.t3.gg/) nous permettant d'avoir une base pour le développement de notre projet avec les technologies suivantes : 
   - [Next.js](https://nextjs.org)
@@ -35,22 +37,6 @@
 # Communication avec le back📡
 
 - Le projet utilise une API REST pour communiquer avec le back et la librairie [Socket.io](https://socket.io/) pour la communication en temps réel.
-
-# Create T3 App
-
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
-
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
 
 ## Learn More
 
