@@ -16,40 +16,122 @@
 > 
 > Nos rapports individuels les deux fichiers [rapport_thomas_delapart.md](rapport_thomas_delapart.md) et [rapport_yazid_benjamaa.pdf](rapport_yazid_benjamaa.pdf) qui sont disponibles à la racine du projet.
 
-# Développement du Projet 🤖 
+# Présentation du Projet 🤖 
+
+Le projet Hagar.io est un jeu multijoueur en temps réel, où le but est d'occuper la première place du classement en augmentant son score le plus possible sans mourir. 
+
+Pour cela, le joueur doit manger des boules de nourriture qui apparaissent aléatoirement sur la carte, et éviter les autres joueurs qui peuvent le manger et manger les joueurs plus petits que lui.
+
+Les fonctionnalités de ce jeu sont les suivantes :
+- Personnalisation du nom du joueur
+- Canva interactif avec la souris pour déplacer le joueur
+- Fonctionnalité de manger la nourriture
+- Interaction en temps réel avec les autres joueurs
+- Fonctionnalité de nourriture empoisonnée pour les joueurs les plus gros
+- Classement des joueurs en temps réel
+- Anti-triche pour assurer l'équité du jeu
+- Mode spectateur après la mort du joueur
+
+# Commandes utiles 📜
+
+```bash
+# Installation des dépendances
+npm i
+# Lancement du projet en mode développement
+npm run dev
+# Lancement des tests d'intégration
+npm run test
+# Génération de la version de production
+npm run build
+# Lancement de la version de production
+npm run start
+(Le projet est aussi toujours disponible à l'adresse : https://sr.thomega.fr/))
+```
+# Aspect Technique du projet 📝
 
 - Pour ce projet, nous sommes partis d'une base générée avec [t3.create](https://create.t3.gg/) nous permettant d'avoir une base pour le développement de notre projet avec les technologies suivantes : 
   - [Next.js](https://nextjs.org)
   - [Tailwind CSS](https://tailwindcss.com)
   - [Typescript](https://www.typescriptlang.org)
   - [React](https://reactjs.org)
-- Nous avons ensuite développé la fonctionnalité de profil utilisateur, afin de person,aliser son nom.
-- Ensuite, nous avons développé la partie graphique du jeu, avec un canva, le dessin des joueurs et de la nourriture.
-- Nous nous sommes ensuite occupés de la logique du jeu, avec la gestion des collisions, des déplacements, de la consommation de la nourriture.
-- Enfin, nous avons ajouté le back-end pour gérer la liste des joueurs connectés, la nourriture commune à tous les joueurs, et la communication en temps réel entre les joueurs.
-- Nous avons fini par l'ajout d'un écran des scores, un écran de fin de partie, et la correction de quelques bugs.
+- Le projet est automatiquement redéployé sur [Vercel](https://vercel.com) à chaque commit pour une mise en production rapide et efficace.
+- Une série de tests d'intégration est aussi lancée à chaque commit pour s'assurer du bon fonctionnement de la non-régression du projet.
+- L'équilibrage du jeu a été soigneusement étudié pour assurer une expérience de jeu équitable pour tous les joueurs. On peut voir ici la réflexion sur de la vitesse de déplacement des joueurs en fonction de leur taille.
+![alt text](image.png)
 
-# Description du projet 📝
+# Particularités du projet 🎮
 
-- Le projet est un jeu multijoueur en ligne, le but est de manger les autres joueurs pour devenir le plus gros possible.
+L'une des particularités de ce projet est que la totalité des calculs du jeu sont effectués côté client pour une expérience de jeu fluide et réactive. Le serveur ne sert que pour la communication entre les joueurs et la mise à jour des scores. (Toutefois, le serveur est capable de gérer les cas de triches et les mises à jour des scores en cas de déconnexion du joueur.)
+
+Notre serveur est donc bien plus léger qu'un jeu orchestrer par un serveur et peut supporter un grand nombre de joueurs simultanément. Cette information a été validée par des tests de charge effectués.
+
+
+# Architecture du projet 🏗️
+
+```
+┌─ .github/workflows/
+│      └─ playwright.yml
+├─ src/
+│  ├─ app/
+│  │  └─ profile/
+│  │     ├─ canvas.tsx
+│  │     ├─ layout.tsx
+│  │     └─ page.tsx
+│  ├─ components/
+│  │  ├─ name-context.tsx
+│  │  └─ navbar.tsx
+│  └─ lib/
+│     ├─ Game.tsx
+│     ├─ Mouse.tsx
+│     └─ tickUpdater.tsx
+└─ tests/
+   ├─ front.spec.ts
+   └─ multiUser.spec.ts
+
+```
 
 
 # Communication avec le back📡
 
 - Le projet utilise une API REST pour communiquer avec le back et la librairie [Socket.io](https://socket.io/) pour la communication en temps réel.
+- Voici un schéma de l'architecture de communication entre le frontend de Vercel et le backend sur ma machine personnelle avec les ports et les URL associées.
 
-## Learn More
+```mermaid
+classDiagram
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+    class Frontend {
+        Host : Vercel
+        Port : 443
+        URL : "https://sr.thomega.fr"
+    }
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+    class Ddns {
+        Host : ddns.net
+        Port : 443
+        URL : "https://srback.ddns.net"
+    }
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+    class LiveBox {
+        Host : LiveBox Orange
+        Port : 443
+        URL : "92.167.217.78" (do change)
+    }
 
-## How do I deploy this?
+    class Nginx {
+        Host : Personnal Computer
+        Port : 443
+        URL : "192.168.1.43" (do change)
+    }
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+    class Backend {
+        Host : Personnal Computer
+        Port : 3003
+        URL : "https://localhost"
+    }
 
+    Frontend --> Ddns
+    Ddns --> LiveBox
+    LiveBox --> Nginx
+    Nginx --> Backend
 
-![alt text](image.png)
+```
